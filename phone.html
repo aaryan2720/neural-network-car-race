@@ -1,19 +1,19 @@
 <!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Self-driving car - Race</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Self-driving Car - Race</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <canvas id="carCanvas"></canvas>
-    <canvas id="cameraCanvas" style="
-      top:50%;
-      left:50%;
-      position:absolute;
-    "></canvas>
-    <canvas id="miniMapCanvas" class="miniMap" style="display:none;"></canvas>
-    <div id="statistics" style="display:none;"></div>
+    <canvas id="cameraCanvas" style="transform: translate(-50%, -50%);"></canvas>
+    <canvas id="miniMapCanvas" class="miniMap" style="display: none;"></canvas>
+    <div id="statistics" style="display: none;"></div>
     <div id="counter"></div>
 
+    <!-- JavaScript files -->
     <script src="world/js/world.js"></script>
     <script src="world/js/viewport.js"></script>
     <script src="world/js/markings/marking.js"></script>
@@ -41,11 +41,8 @@
     <script src="world/js/primitives/segment.js"></script>
     <script src="world/js/primitives/polygon.js"></script>
     <script src="world/js/primitives/envelope.js"></script>
-
-    <!--<script src="world/saves/big.world"></script>-->
-    <!--<script src="world/saves/big_with_target.world"></script>-->
-    <script src="world/saves/path_finding.world"></script>
     
+    <script src="world/saves/path_finding.world"></script>
     <script src="saves/right_hand_rule.car"></script>
 
     <script src="phoneControls.js"></script>
@@ -61,7 +58,49 @@
     <script src="race.js"></script>
 
     <script>
-      myCar.controls = new PhoneControls(cameraCanvas);
+        // Resize canvases based on window size for stable display
+        const carCanvas = document.getElementById("carCanvas");
+        const cameraCanvas = document.getElementById("cameraCanvas");
+
+        function resizeCanvas() {
+            carCanvas.width = window.innerWidth;
+            carCanvas.height = window.innerHeight;
+            cameraCanvas.width = window.innerWidth;
+            cameraCanvas.height = window.innerHeight;
+        }
+
+        window.addEventListener("resize", resizeCanvas);
+        resizeCanvas(); // Initial call to set canvas size
+
+        // Initialize car controls for phone with smoothing factor
+        class PhoneControls {
+            constructor(canvas) {
+                this.canvas = canvas;
+                this.sensitivity = 0.5; // Smoother control
+
+                canvas.addEventListener("touchmove", (e) => {
+                    this.moveDirection = e.touches[0].clientX * this.sensitivity;
+                    this.moveDirection = Math.min(1, Math.max(-1, this.moveDirection));
+                });
+            }
+        }
+
+        // Start the car animation loop
+        function animate() {
+            carCanvas.getContext("2d").clearRect(0, 0, carCanvas.width, carCanvas.height);
+            cameraCanvas.getContext("2d").clearRect(0, 0, cameraCanvas.width, cameraCanvas.height);
+
+            myCar.update();
+            myCamera.update(); // Assumes a camera object for smoother tracking
+
+            requestAnimationFrame(animate);
+        }
+
+        const myCar = new Car();
+        const myCamera = new Camera(myCar);
+        myCar.controls = new PhoneControls(cameraCanvas);
+
+        animate();
     </script>
 </body>
 </html>
