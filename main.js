@@ -22,7 +22,7 @@ const world = worldInfo
 const viewport = new Viewport(carCanvas, world.zoom, world.offset);
 const miniMap = new MiniMap(miniMapCanvas, world.graph, 300);
 
-const N=500;
+const N=100;
 const cars=generateCars(N);
 let bestCar=cars[0];
 if(localStorage.getItem("bestBrain")){
@@ -36,15 +36,7 @@ if(localStorage.getItem("bestBrain")){
 }
 
 const traffic=[];
-
-let roadBorders = [];
-const target = world.markings.find((m) => m instanceof Target);
-if (target) {
-   world.generateCorridor(bestCar, target.center);
-   roadBorders = world.corridor.borders.map((s) => [s.p1, s.p2]);
-} else {
-   roadBorders = world.roadBorders.map((s) => [s.p1, s.p2]);
-}
+const roadBorders = world.roadBorders.map((s) => [s.p1, s.p2]);
 
 animate();
 
@@ -69,9 +61,7 @@ function generateCars(N){
     
     const cars=[];
     for(let i=1;i<=N;i++){
-        const car = new Car(startPoint.x, startPoint.y,30,50,"AI",startAngle);
-        car.load(carInfo);
-        cars.push(car);
+        cars.push(new Car(startPoint.x, startPoint.y,30,50,"AI",startAngle));
     }
     return cars;
 }
