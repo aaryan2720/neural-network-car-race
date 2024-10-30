@@ -1,20 +1,16 @@
 <!DOCTYPE html>
 <head>
-    <title>Self-driving car - No libraries</title>
+    <title>Self-driving car - Race</title>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- Favicon link -->
 
 </head>
 <body>
     <canvas id="carCanvas"></canvas>
-    <div id="verticalButtons">
-        <button onclick="save()">💾</button>
-        <button onclick="discard()">🗑️</button>
-    </div>
-    <div>
-      <canvas id="networkCanvas"></canvas>
-      <canvas id="miniMapCanvas"></canvas>
-    </div>
+    <canvas id="cameraCanvas"></canvas>
+    <canvas id="miniMapCanvas" class="miniMap"></canvas>
+    <div id="statistics"></div>
+    <div id="counter"></div>
 
     <script src="world/js/world.js"></script>
     <script src="world/js/viewport.js"></script>
@@ -44,8 +40,14 @@
     <script src="world/js/primitives/polygon.js"></script>
     <script src="world/js/primitives/envelope.js"></script>
 
-    <script src="world/saves/big.world"></script>
+    <!--<script src="world/saves/big.world"></script>-->
+    <!--<script src="world/saves/big_with_target.world"></script>-->
+    <script src="world/saves/path_finding.world"></script>
+    
+    <script src="saves/right_hand_rule.car"></script>
 
+    <script src="camera.js"></script>
+    <script src="sound.js"></script>
     <script src="miniMap.js"></script>
     <script src="visualizer.js"></script>
     <script src="network.js"></script>
@@ -53,6 +55,9 @@
     <script src="utils.js"></script>
     <script src="controls.js"></script>
     <script src="car.js"></script>
-    <script src="main.js"></script>
+    <script src="race.js"></script>
+    <script src="phoneControls.js"></script>
+    
+
 </body>
 </html>
